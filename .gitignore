@@ -1,0 +1,15 @@
+# Python virtual environment
+.venv/
+venv/
+
+# VS Code workspace files
+*.code-workspace
+
+# Google Cloud service account credentials
+*.json
+
+# Miscellaneous system or temporary files
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
