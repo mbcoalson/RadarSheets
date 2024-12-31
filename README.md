@@ -73,3 +73,55 @@ RadarSheets/
     ├── main.py                              # Not in use
     └── __init__.py                          # Not in use
 
+Setup
+Install Python Libraries:
+bash
+Copy code
+pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client plotly
+Service Account Setup:
+Create a service account in Google Cloud Console.
+Enable the Google Drive and Google Sheets APIs.
+Download the JSON credentials file and place it in src/api as service_account.json.
+Prepare Google Spreadsheet:
+Ensure the spreadsheet matches the format of 2025 RFI Reviewer Scoring.
+Use the dataclean.gs file:
+Go to Extensions > Apps Script and create a new Apps Script file named dataclean.
+Copy and paste the dataclean.gs script from this repository.
+Run the script to validate that a sheet named "Cleaned Values Only Data" is created with standard data types (e.g., numbers without formulas).
+Update Configuration:
+Modify main_script.py:
+Set SPREADSHEET_ID to your Google Spreadsheet ID.
+Set SERVICE_ACCOUNT_FILE to the path of your credentials file.
+Usage
+Run the Main Script:
+bash
+Copy code
+python main_script.py
+Process Overview:
+Authenticates with Google APIs.
+Generates radar plots.
+Uploads radar plots to Google Drive.
+Embeds radar plots into Google Sheets and resizes cells.
+Error Handling
+Invalid Data Structures:
+Logs invalid sheets for review.
+Failed Uploads or Inserts:
+Logs companies with failed operations for debugging.
+Debugging:
+Check the terminal output for error details.
+Customization
+Image Size:
+Adjust row_height and column_width in the resize_sheet_cells function.
+Radar Plot Appearance:
+Edit google_sheets_radar_plot.1.py for custom styles and metrics.
+Future Enhancements
+Add support for additional chart types.
+Provide a web-based interface for non-technical users.
+Implement database integration for processed data storage.
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+Support
+For issues or questions, please contact the developer.
+
+
