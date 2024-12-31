@@ -1,127 +1,131 @@
-# RadarSheets: Automating Radar Plot Integration with Google Sheets
+RadarSheets: Automating Radar Plot Integration with Google Sheets
+Overview
+RadarSheets is a Python-based project designed to automate radar plot generation for Google Sheets. This is a one-off project specifically for the GPG FY25 initiative but is adaptable for future GPG years, provided the data format remains consistent.
 
-## Overview
-RadarSheets is a Python-based project designed to automate the process of generating radar plots for companies based on evaluation data in Google Sheets. The radar plots are created as PNG images, uploaded to Google Drive, and inserted into corresponding Google Sheets for easy visualization. This project leverages Google APIs to ensure seamless integration and supports error handling for invalid data structures.
+The radar plots are created as PNG images, uploaded to Google Drive, and inserted into corresponding Google Sheets for visualization. Additionally, interactive HTML versions of the radar plots are saved locally on the machine running these scripts.
 
----
+Key Features
+Automated Radar Plot Generation:
 
-## Key Features
-1. **Automated Radar Plot Generation**:
-   - Generates radar plots using company evaluation data extracted from Google Sheets.
-   - Plots are saved as PNG files.
+Generates radar plots categorized by company, layering three lab reviews for each plot.
+Saves plots as PNG and HTML files.
+Google Drive Integration:
 
-2. **Google Drive Integration**:
-   - Radar plots are uploaded to Google Drive with public access.
-   - Generates URLs for uploaded images.
+Uploads radar plots to Google Drive with public access.
+Generates URLs for the uploaded images.
+Google Sheets Integration:
 
-3. **Google Sheets Integration**:
-   - Inserts radar plot images directly into Google Sheets using the `IMAGE` function.
-   - Automatically resizes rows and columns to accommodate the images.
+Embeds radar plot images in Google Sheets using the IMAGE function.
+Automatically resizes rows and columns to fit the images.
+Error Handling:
 
-4. **Error Handling**:
-   - Handles invalid data structures in sheets.
-   - Logs failed uploads and invalid sheets for further debugging.
+Validates sheet data structure and logs invalid entries.
+Logs failed uploads and inserts for debugging.
+Data Cleaning:
 
----
+Employs dataclean.gs, a Google Apps Script, to convert formulas or data pulls into a sheet with standardized data types (e.g., strings, floats).
+Prerequisites
+Software Requirements:
 
-## Prerequisites
-1. Python 3.7+
-2. Required Python Libraries:
-   - `google-auth`
-   - `google-auth-oauthlib`
-   - `google-auth-httplib2`
-   - `google-api-python-client`
-   - `plotly`
-3. Service Account Credentials:
-   - A JSON key file for Google API authentication.
-4. A Google Spreadsheet with structured evaluation data.
+Python 3.12 or higher
+Google Sheets and Google Drive APIs enabled
+Python Libraries:
 
----
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+plotly
+Service Account Credentials:
 
-## Directory Structure
-```plaintext
+A JSON key file for Google API authentication.
+Spreadsheet:
+
+A Google Spreadsheet containing structured evaluation data.
+Directory Structure
+plaintext
+Copy code
 RadarSheets/
-├── src/
-│   ├── api/
-│   │   ├── google_sheets_radar_plot.1.py  # Script for radar plot generation
-│   │   ├── service_account.json           # Google API credentials
-├── radar_plots/                           # Directory for generated PNGs
-└── main.py                                # Main script integrating all functionalities
-```
+│
+└── src/
+    ├── api/
+    │   ├── google_sheets.py                 # Early iteration, not in use
+    │   ├── google_sheets_radar_plot.1.py    # Script used by main_script.py
+    │   ├── google_sheets_radar_plot.py      # Early iteration, not in use
+    │   ├── main_script.py                   # Main execution script
+    │   ├── service_account.json             # Google API credentials file
+    │   └── __init__.py                      # Not in use
+    │
+    ├── plots/                               # Not in use
+    │   ├── radar_plot.py
+    │   └── __init__.py
+    │
+    ├── utils/                               # Not in use
+    │   ├── data_cleaner.py
+    │   └── __init__.py
+    │
+    ├── main.py                              # Not in use
+    └── __init__.py                          # Not in use
+Setup
+Install Python Libraries:
 
----
+bash
+Copy code
+pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client plotly
 
-## Setup
-1. **Install Python Libraries**:
-   ```bash
-   pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client plotly
-   ```
+Service Account Setup:
 
-2. **Service Account Setup**:
-   - Create a service account in Google Cloud Console.
-   - Enable Google Drive and Google Sheets APIs.
-   - Download the JSON credentials file and save it as `service_account.json` in the `src/api` directory.
+Create a service account in Google Cloud Console.
+Enable the Google Drive and Google Sheets APIs.
+Download the JSON credentials file and place it in src/api as service_account.json.
+Prepare Google Spreadsheet:
 
-3. **Prepare Google Spreadsheet**:
-   - Ensure the spreadsheet follows this structure:
-     - Column A: Company Name
-     - Columns B-C: Evaluator and Lab
-     - Columns D-H: Metrics for radar plots (e.g., Innovate, Impact, Savings, etc.)
-   - Add more sheets as needed; the script processes all sheets in the spreadsheet.
+Ensure the spreadsheet matches the format of 2025 RFI Reviewer Scoring.
+Use the dataclean.gs file:
+Go to Extensions > Apps Script and create a new Apps Script file named dataclean.
+Copy and paste the dataclean.gs script from this repository.
+Run the script to validate that a sheet named "Cleaned Values Only Data" is created with standard data types (e.g., numbers without formulas).
+Update Configuration:
 
-4. **Update Configuration**:
-   - In `main.py`, update:
-     - `SPREADSHEET_ID`: The ID of your Google Spreadsheet.
-     - `SERVICE_ACCOUNT_FILE`: Path to your credentials file.
+Modify main_script.py:
+Set SPREADSHEET_ID to your Google Spreadsheet ID.
+Set SERVICE_ACCOUNT_FILE to the path of your credentials file.
+Usage
+Run the Main Script:
 
----
+bash
+Copy code
+python main_script.py
+Process Overview:
 
-## Usage
-1. **Run the Main Script**:
-   ```bash
-   python main.py
-   ```
-2. **Process Flow**:
-   - The script authenticates Google APIs.
-   - Runs the radar plot generation script.
-   - Uploads the radar plots to Google Drive.
-   - Inserts radar plots into Google Sheets and resizes the cells.
+Authenticates with Google APIs.
+Generates radar plots.
+Uploads radar plots to Google Drive.
+Embeds radar plots into Google Sheets and resizes cells.
+Error Handling
+Invalid Data Structures:
 
----
+Logs invalid sheets for review.
+Failed Uploads or Inserts:
 
-## Error Handling
-1. **Invalid Data Structure**:
-   - If a sheet does not contain the required structure, it is logged as invalid.
+Logs companies with failed operations for debugging.
+Debugging:
 
-2. **Failed Uploads or Inserts**:
-   - Companies with failed uploads or inserts are logged for review.
+Check the terminal output for error details.
+Customization
+Image Size:
 
-3. **Debugging**:
-   - Review the terminal output for details on errors.
+Adjust row_height and column_width in the resize_sheet_cells function.
+Radar Plot Appearance:
 
----
+Edit google_sheets_radar_plot.1.py for custom styles and metrics.
+Future Enhancements
+Add support for additional chart types.
+Provide a web-based interface for non-technical users.
+Implement database integration for processed data storage.
+License
+Not applicable.
 
-## Customization
-1. **Image Size**:
-   - Modify `row_height` and `column_width` in the `resize_sheet_cells` function to change cell dimensions.
+Support
+For issues or questions, please contact the developer.
 
-2. **Radar Plot Appearance**:
-   - Customize the plotly script (`google_sheets_radar_plot.1.py`) for different styles and metrics.
-
----
-
-## Future Enhancements
-1. Add support for different chart types.
-2. Provide a web-based interface for non-technical users.
-3. Include email notifications for errors or completion statuses.
-4. Implement database integration to store processed data.
-
----
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-
-## Support
-For issues or questions, contact the developer or submit a GitHub issue in the repository.
