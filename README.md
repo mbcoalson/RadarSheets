@@ -5,6 +5,8 @@ RadarSheets is a Python-based project designed to automate radar plot generation
 
 The radar plots are created as PNG images, uploaded to Google Drive, and inserted into corresponding Google Sheets for visualization. Additionally, interactive HTML versions of the radar plots are saved locally on the machine running these scripts.
 
+All working files will be found in RadarSheets>src>api.
+
 ---
 
 ## **Key Features**
